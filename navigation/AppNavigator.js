@@ -6,6 +6,7 @@ import FeedScreen from "../screens/Feed";
 import UploadScreen from "../screens/UploadScreen";
 import ProfileScreen from "../screens/Profile";
 import LoginScreen from "../screens/Login";
+import RegisterScreen from "../screens/Register";
 import AuthContext from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
@@ -29,11 +30,16 @@ const AppNavigator = () => {
         // Si el usuario está autenticado, mostramos los tabs
         <AppTabs />
       ) : (
-        // Si el usuario no está autenticado, mostramos el stack con Login
+        // Si el usuario no está autenticado, mostramos el stack con Login y Register
         <Stack.Navigator>
           <Stack.Screen
             name="Login"
             component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

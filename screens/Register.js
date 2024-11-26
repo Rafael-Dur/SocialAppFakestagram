@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { loginUser } from "../services/authService";
-import AuthContext from "../context/AuthContext";
+import { registerUser } from "../services/authService";
 import { useNavigation } from "@react-navigation/native";
+import AuthContext from "../context/AuthContext";
 
-const Login = () => {
+const Register = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const { setUser } = useContext(AuthContext);
@@ -16,18 +16,18 @@ const Login = () => {
       return;
     }
     try {
-      const userData = await loginUser(formData);
+      const userData = await registerUser(formData);
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
-      navigation.navigate("Feed");
+      navigation.navigate("Login");
     } catch (error) {
-      setError("Credenciales incorrectas o error de conexión");
+      setError(error.message || "Error al registrar el usuario");
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Iniciar Sesión</Text>
+      <Text style={styles.header}>Registrarse</Text>
       <TextInput
         name="email"
         type="email"
@@ -47,15 +47,15 @@ const Login = () => {
       />
       {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
       <Text style={styles.footerText}>
-        ¿No tienes cuenta?{" "}
+        ¿Ya tienes cuenta?{" "}
         <Text
           style={styles.link}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Login")}
         >
-          Regístrate
+          Inicia sesión
         </Text>
       </Text>
     </ScrollView>
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Register;
