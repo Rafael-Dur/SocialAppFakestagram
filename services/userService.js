@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.0.100:3001/api/user"; // Endpoint base para usuarios
+const API_URL = "http://192.168.0.100:3001/api/user";
 
 export const getUserProfile = async (userId, token) => {
   const response = await axios.get(`${API_URL}/profile/${userId}`, {

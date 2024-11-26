@@ -39,7 +39,7 @@ const UploadScreen = () => {
     formData.append("caption", caption);
 
     try {
-      await uploadImage(formData, user.token); // Llama al servicio de subida
+      await uploadImage(formData, user.token);
       Alert.alert("Éxito", "Imagen subida correctamente");
       setImage(null);
       setCaption("");

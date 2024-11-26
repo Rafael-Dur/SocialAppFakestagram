@@ -9,7 +9,6 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       // Envía la actualización al backend
-      // Similar a los servicios anteriores.
     } catch (error) {
       alert("Error al actualizar perfil.");
     }

@@ -8,7 +8,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const { setUser } = useContext(AuthContext);
-  const navigation = useNavigation();  // Usamos useNavigation para obtener la navegación
+  const navigation = useNavigation();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

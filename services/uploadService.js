@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.0.100:3001/api/posts"; // Endpoint base para subida de imágenes
+const API_URL = "http://192.168.0.100:3001/api/posts";
 
 export const uploadImage = async (formData, token) => {
   try {
