@@ -22,28 +22,26 @@ export const ProfileProvider = ({ children }) => {
     loadProfile();
   }, []);
 
-  // Obtener perfil desde la API
   const fetchProfile = async (userId) => {
     try {
-      const profileData = await getUserProfile(userId);  // Llama a la API para obtener el perfil
+      const profileData = await getUserProfile(userId);
       setProfile(profileData);
-      await AsyncStorage.setItem("profile", JSON.stringify(profileData));  // Guarda el perfil en AsyncStorage
+      await AsyncStorage.setItem("profile", JSON.stringify(profileData));
     } catch (error) {
       console.error("Error al obtener perfil:", error);
     }
   };
 
-  // Actualizar el perfil
   const updateProfile = async (userData) => {
     try {
-      const updatedProfile = await updateUserProfile(userData);  // Llama a la API para actualizar el perfil
+      const updatedProfile = await updateUserProfile(userData);
       setProfile(updatedProfile);
-      await AsyncStorage.setItem("profile", JSON.stringify(updatedProfile));  // Guarda el perfil actualizado en AsyncStorage
+      await AsyncStorage.setItem("profile", JSON.stringify(updatedProfile));
     } catch (error) {
       console.error("Error al actualizar perfil:", error);
     }
   };
-
+  
   return (
     <ProfileContext.Provider value={{ profile, setProfile, fetchProfile, updateProfile }}>
       {children}
