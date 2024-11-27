@@ -1,58 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
-import { getFeed, likePost } from "../controllers/postController";
-import AuthContext from "../context/AuthContext";
+import React, { useContext } from "react";
+import { View, Text, Button, Image, StyleSheet, ActivityIndicator } from "react-native";
+import PostContext from "../context/PostContext";
 
 const Feed = () => {
-  const { user } = useContext(AuthContext);
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchFeed = async () => {
-      try {
-        const data = await getFeed(user.token);
-        setPosts(data);
-      } catch (err) {
-        setError("No se pudo cargar el feed.");
-      }
-    };
-    fetchFeed();
-  }, [user.token]);
-
-  const handleLike = async (postId) => {
-    try {
-      await likePost(postId, user.token);
-      setPosts((prev) =>
-        prev.map((post) =>
-          post._id === postId
-            ? {
-                ...post,
-                likes: post.likes.includes(user._id)
-                  ? post.likes.filter((id) => id !== user._id)
-                  : [...post.likes, user._id],
-              }
-            : post
-        )
-      );
-    } catch (err) {
-      setError("No se pudo registrar el like.");
-    }
-  };
+  const { posts = [], loading, error, addLike } = useContext(PostContext);
 
   return (
     <View style={styles.container}>
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
       {error && <Text style={styles.errorText}>{error}</Text>}
       {posts.map((post) => (
         <View key={post._id} style={styles.postContainer}>
-          <Image
-            source={{ uri: `http://localhost:3001/${post.imageUrl}` }}
-            style={styles.postImage}
-          />
+          <Image source={{ uri: `http://localhost:3001/${post.imageUrl}` }} style={styles.postImage} />
           <Text>{post.caption}</Text>
           <Button
-            title={`❤️ ${post.likes.length}`}
-            onPress={() => handleLike(post._id)}
+            title={`❤️ ${Array.isArray(post.likes) ? post.likes.length : 0}`}
+            onPress={() => addLike(post._id)}
           />
         </View>
       ))}

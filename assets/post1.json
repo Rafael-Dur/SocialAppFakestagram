@@ -1,0 +1,32 @@
+{
+    "user": {
+      "id": "user1",
+      "name": "Juan Pérez",
+      "profile_picture": "https://get.pxhere.com/photo/man-person-hair-white-profile-male-portrait-model-young-hairstyle-smile-beard-face-glasses-head-moustache-eyewear-photo-shoot-facial-hair-vision-care-451653.jpg"
+    },
+    "image": {
+      "uri": "./assets/poast1.png",
+      "name": "vacaciones.png",
+      "type": "image/png"
+    },
+    "caption": "Buenos días! Miren lo que es esta vista!",
+    "likes": 150,
+    "comments": [
+      {
+        "user": {
+          "id": "user2",
+          "name": "Ana Gómez"
+        },
+        "content": "¡Qué envidia! Se ve increíble 😍"
+      },
+      {
+        "user": {
+          "id": "user3",
+          "name": "Carlos Martínez"
+        },
+        "content": "Esos días en la playa son los mejores 👌"
+      }
+    ],
+    "createdAt": "2024-11-25T12:00:00Z"
+  }
+  

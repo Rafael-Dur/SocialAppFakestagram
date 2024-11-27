@@ -3,15 +3,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import FeedScreen from "../screens/Feed";
-import UploadScreen from "../screens/UploadScreen";
+import UploadScreen from "../screens/PostScreen";
 import ProfileScreen from "../screens/Profile";
 import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import AuthContext from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-// Tabs para usuarios autenticados
+/**
+ * Tabs para usuarios autenticados.
+ */
 const AppTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Feed" component={FeedScreen} />
@@ -20,39 +23,31 @@ const AppTabs = () => (
   </Tab.Navigator>
 );
 
-
-const Stack = createStackNavigator();
-
-// Crear un RootStack para manejar las pantallas de inicio de sesión y registro
-const RootStack = createStackNavigator();
-
+/**
+ * Root stack para usuarios autenticados.
+ */
 const RootNavigator = () => (
-  <RootStack.Navigator screenOptions={{ headerShown: false }}>
-    <RootStack.Screen name="AppTabs" component={AppTabs} />
-  </RootStack.Navigator>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="AppTabs" component={AppTabs} />
+  </Stack.Navigator>
 );
 
+/**
+ * AppNavigator maneja la navegación global.
+ */
 const AppNavigator = () => {
   const { user } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
       {user ? (
-        // Si el usuario está autenticado, navegar a los Tabs
+        // Usuarios autenticados
         <RootNavigator />
       ) : (
-        // Si el usuario no está autenticado, mostrar las pantallas de login y registro
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{ headerShown: false }}
-          />
+        // Usuarios no autenticados
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

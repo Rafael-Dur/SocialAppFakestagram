@@ -1,24 +1,24 @@
 import React, { useState, useContext } from "react";
-import { View, Text, Button, Image, TextInput, StyleSheet, Alert, ActivityIndicator} from "react-native";
-import { launchImageLibrary } from 'react-native-image-picker';
-import { uploadImage } from "../controllers/uploadController";
-import AuthContext from "../context/AuthContext";
+import { View, Text, Button, Image, TextInput, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { launchImageLibrary } from "react-native-image-picker";
+import PostContext from "../context/PostContext";
 
-const UploadScreen = () => {
-  const { user } = useContext(AuthContext);
+const PostScreen = () => {
+  const { addPost, loading } = useContext(PostContext);
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSelectImage = () => {
     launchImageLibrary({ mediaType: "photo" }, (response) => {
       if (!response.didCancel && response.assets) {
         const selectedImage = response.assets[0];
-        if (selectedImage.type.startsWith("image/")) {
+        if (selectedImage?.type?.startsWith("image/")) {
           setImage(selectedImage);
         } else {
           Alert.alert("Error", "Por favor selecciona un archivo de imagen válido.");
         }
+      } else {
+        Alert.alert("Error", "No se seleccionó ninguna imagen.");
       }
     });
   };
@@ -29,33 +29,28 @@ const UploadScreen = () => {
       return;
     }
 
-    setLoading(true);
     const formData = new FormData();
     formData.append("image", {
       uri: image.uri,
-      name: image.fileName || `photo_${Date.now()}.jpg`, // Uso seguro en caso de que falte `fileName`.
+      name: image.fileName || `photo_${Date.now()}.jpg`,
       type: image.type,
     });
     formData.append("caption", caption);
 
     try {
-      await uploadImage(formData, user.token);
-      Alert.alert("Éxito", "Imagen subida correctamente");
+      await addPost(formData);
+      Alert.alert("Éxito", "Post subido correctamente");
       setImage(null);
       setCaption("");
-    } catch (error) {
-      Alert.alert("Error", error.message || "No se pudo subir la imagen.");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      Alert.alert("Error", "No se pudo subir el post.");
     }
   };
 
   return (
     <View style={styles.container}>
       <Button title="Seleccionar Imagen" onPress={handleSelectImage} />
-      {image && (
-        <Image source={{ uri: image.uri }} style={styles.imagePreview} />
-      )}
+      {image && <Image source={{ uri: image.uri }} style={styles.imagePreview} />}
       <TextInput
         style={styles.input}
         placeholder="Escribe un pie de foto..."
@@ -93,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadScreen;
+export default PostScreen;
