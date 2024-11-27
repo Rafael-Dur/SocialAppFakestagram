@@ -10,7 +10,7 @@ export const saveAuthToken = async (token) => {
     console.error("Error al guardar el token:", error);
     throw error;
   }
-};
+};1
 
 // Obtener el token JWT desde AsyncStorage
 export const getAuthToken = async () => {

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { View, Text, Button, Image, TextInput, StyleSheet, Alert, ActivityIndicator} from "react-native";
 import { launchImageLibrary } from 'react-native-image-picker';
-import { uploadImage } from "../services/uploadService";
+import { uploadImage } from "../controllers/uploadController";
 import AuthContext from "../context/AuthContext";
 
 const UploadScreen = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { registerUser } from "../services/authService";
+import { registerUser } from "../controllers/authController";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../context/AuthContext";
 
