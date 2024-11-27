@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import {ScrollView, View, Text, Button, Image, StyleSheet } from "react-native";
 import { getFeed, likePost } from "../controllers/postController";
 import AuthContext from "../context/AuthContext";
 
@@ -41,12 +41,12 @@ const Feed = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {error && <Text style={styles.errorText}>{error}</Text>}
       {posts.map((post) => (
         <View key={post._id} style={styles.postContainer}>
           <Image
-            source={{ uri: `http://localhost:3001/${post.imageUrl}` }}
+            source={{ uri: post.imageUrl }}
             style={styles.postImage}
           />
           <Text>{post.caption}</Text>
@@ -56,7 +56,7 @@ const Feed = () => {
           />
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
