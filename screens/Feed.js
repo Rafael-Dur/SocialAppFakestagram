@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { View, Text, Button, Image, StyleSheet } from "react-native";
 import { getFeed, likePost } from "../services/postService";
 import AuthContext from "../context/AuthContext";
 
@@ -25,9 +26,11 @@ const Feed = () => {
       setPosts((prev) =>
         prev.map((post) =>
           post._id === postId
-            ? { ...post, likes: post.likes.includes(user._id) 
+            ? {
+                ...post,
+                likes: post.likes.includes(user._id)
                   ? post.likes.filter((id) => id !== user._id)
-                  : [...post.likes, user._id] 
+                  : [...post.likes, user._id],
               }
             : post
         )
@@ -38,23 +41,43 @@ const Feed = () => {
   };
 
   return (
-    <div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <View style={styles.container}>
+      {error && <Text style={styles.errorText}>{error}</Text>}
       {posts.map((post) => (
-        <div key={post._id}>
-          <img
-            src={`http://localhost:3001/${post.imageUrl}`}
-            alt={post.caption}
-            style={{ maxWidth: "100%", height: "auto" }}
+        <View key={post._id} style={styles.postContainer}>
+          <Image
+            source={{ uri: `http://localhost:3001/${post.imageUrl}` }}
+            style={styles.postImage}
           />
-          <p>{post.caption}</p>
-          <button onClick={() => handleLike(post._id)}>
-            ❤️ {post.likes.length}
-          </button>
-        </div>
+          <Text>{post.caption}</Text>
+          <Button
+            title={`❤️ ${post.likes.length}`}
+            onPress={() => handleLike(post._id)}
+          />
+        </View>
       ))}
-    </div>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  postContainer: {
+    marginBottom: 20,
+  },
+  postImage: {
+    width: "100%",
+    height: 200,
+    resizeMode: "contain",
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+});
 
 export default Feed;
