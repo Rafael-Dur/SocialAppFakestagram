@@ -7,7 +7,24 @@ const PostScreen = () => {
   const { addPost, loading } = useContext(PostContext);
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
+  
+  const handleTakeImage = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your camera!");
+      return;
+    }
+    
+    const result = await ImagePicker.launchCameraAsync();
 
+    console.log("Resultado:" + result);
+    
+    if (!result.canceled) {
+      console.log("Asset 0: " + result.assets[0]);
+      setImage(result.assets[0]);
+    }
+  }
   const handleSelectImage = async () => {
     // Request permission for photo library (for Expo-managed workflow)
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -64,6 +81,7 @@ const PostScreen = () => {
   return (
     <View style={styles.container}>
       <Button title="Seleccionar Imagen" onPress={handleSelectImage} />
+      <Button title="Sacar foto" onPress={handleTakeImage} />
       {image && <Image source={{ uri: image.uri }} style={styles.imagePreview} />}
       <TextInput
         style={styles.input}
