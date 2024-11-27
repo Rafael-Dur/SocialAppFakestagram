@@ -8,6 +8,8 @@ import ProfileScreen from "../screens/Profile";
 import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import AuthContext from "../context/AuthContext";
+import PostDetails from "../screens/PostDetails";
+import Feed from "../screens/Feed";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,6 +31,8 @@ const RootStack = createStackNavigator();
 const RootNavigator = () => (
   <RootStack.Navigator screenOptions={{ headerShown: false }}>
     <RootStack.Screen name="AppTabs" component={AppTabs} />
+    <RootStack.Screen name="PostDetails" component={PostDetails} options={{ title: "Detalles del Post" }} />
+    <RootStack.Screen name="Feed" component={Feed} options={{ title: "Feed" }} />
   </RootStack.Navigator>
 );
 

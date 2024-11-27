@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import {ScrollView, View, Text, Button, Image, StyleSheet } from "react-native";
+import {ScrollView, View, Text, Button, Image, StyleSheet,TouchableOpacity } from "react-native";
 import { getFeed, likePost } from "../controllers/postController";
 import AuthContext from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 const Feed = () => {
   const { user } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchFeed = async () => {
@@ -40,15 +42,21 @@ const Feed = () => {
     }
   };
 
+  const goToDetails = (post) => {
+    navigation.navigate("PostDetails", { post });
+  };
+
   return (
     <ScrollView style={styles.container}>
       {error && <Text style={styles.errorText}>{error}</Text>}
       {posts.map((post) => (
         <View key={post._id} style={styles.postContainer}>
-          <Image
-            source={{ uri: post.imageUrl }}
-            style={styles.postImage}
-          />
+          <TouchableOpacity onPress={() => goToDetails(post)}>
+            <Image
+              source={{ uri: post.imageUrl }}
+              style={styles.postImage}
+            />
+          </TouchableOpacity>
           <Text>{post.caption}</Text>
           <Button
             title={`❤️ ${post.likes.length}`}
