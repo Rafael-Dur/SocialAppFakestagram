@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button, Image, StyleSheet } from "react-native";
-import { getFeed, likePost } from "../services/postService";
+import { getFeed, likePost } from "../controllers/postController";
 import AuthContext from "../context/AuthContext";
 
 const Feed = () => {

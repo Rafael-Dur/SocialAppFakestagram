@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { loginUser } from "../services/authService";
+import { loginUser } from "../controllers/authController";
 import AuthContext from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 
