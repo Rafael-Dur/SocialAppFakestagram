@@ -9,8 +9,8 @@ import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import AuthContext from "../context/AuthContext";
 
+// Crea el Tab Navigator
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 
 // Tabs para usuarios autenticados
 const AppTabs = () => (
@@ -21,16 +21,27 @@ const AppTabs = () => (
   </Tab.Navigator>
 );
 
+const Stack = createStackNavigator();
+
+// Crear un RootStack para manejar las pantallas de inicio de sesión y registro
+const RootStack = createStackNavigator();
+
+const RootNavigator = () => (
+  <RootStack.Navigator screenOptions={{ headerShown: false }}>
+    <RootStack.Screen name="AppTabs" component={AppTabs} />
+  </RootStack.Navigator>
+);
+
 const AppNavigator = () => {
   const { user } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
       {user ? (
-        // Si el usuario está autenticado, mostramos los tabs
-        <AppTabs />
+        // Si el usuario está autenticado, navegar a los Tabs
+        <RootNavigator />
       ) : (
-        // Si el usuario no está autenticado, mostramos el stack con Login y Register
+        // Si el usuario no está autenticado, mostrar las pantallas de login y registro
         <Stack.Navigator>
           <Stack.Screen
             name="Login"

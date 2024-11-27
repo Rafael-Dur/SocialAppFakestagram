@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  // Cargar usuario desde AsyncStorage al iniciar
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -20,18 +21,38 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
+  // Método para iniciar sesión y guardar usuario
   const login = async (userData) => {
-    setUser(userData);
-    await AsyncStorage.setItem("user", JSON.stringify(userData));
+    try {
+      setUser(userData);
+      await AsyncStorage.setItem("user", JSON.stringify(userData));
+    } catch (err) {
+      console.error("Error al guardar el usuario durante login:", err);
+    }
   };
 
+  // Método para registrar al usuario (puede ser usado como referencia en el contexto global)
+  const register = async (userData) => {
+    try {
+      setUser(userData);
+      await AsyncStorage.setItem("user", JSON.stringify(userData));
+    } catch (err) {
+      console.error("Error al guardar el usuario durante registro:", err);
+    }
+  };
+
+  // Método para cerrar sesión y eliminar datos del usuario
   const logout = async () => {
-    setUser(null);
-    await AsyncStorage.removeItem("user");
+    try {
+      setUser(null);
+      await AsyncStorage.removeItem("user");
+    } catch (err) {
+      console.error("Error al eliminar el usuario durante logout:", err);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { loginUser } from "../services/authService";
 import AuthContext from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
@@ -7,19 +14,28 @@ import { useNavigation } from "@react-navigation/native";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
-  const { setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); // Usar el método `login` del contexto
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    if (!formData.email || !formData.password) {
+    const { email, password } = formData;
+
+    if (!email || !password) {
       setError("Por favor completa todos los campos");
       return;
     }
+
     try {
-      const userData = await loginUser(formData);
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      navigation.navigate("Feed");
+      const userData = await loginUser(formData); // Llamada al servicio de autenticación
+      await login(userData); // Guardar usuario en el contexto y AsyncStorage
+      console.log("Usuario autenticado:", userData);
+
+      // Aquí se navega al feed después de guardar al usuario
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Feed" }],
+      });
+
     } catch (error) {
       setError("Credenciales incorrectas o error de conexión");
     }

@@ -5,21 +5,32 @@ import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../context/AuthContext";
 
 const Register = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
   const { setUser } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
-    if (!formData.email || !formData.password) {
-      setError("Por favor completa todos los campos");
+    const { username, email, password } = formData;
+
+    // Validación de campos vacíos
+    if (!username || !email || !password) {
+      setError("Todos los campos son obligatorios");
       return;
     }
+
+    // Validación de formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("El formato del email es inválido");
+      return;
+    }
+
     try {
       const userData = await registerUser(formData);
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      navigation.navigate("Login");
+      setUser(userData); // Guardar el usuario en el contexto
+      localStorage.setItem("user", JSON.stringify(userData)); // Guardar en localStorage
+      navigation.navigate("Login"); // Redirigir a la pantalla de inicio de sesión
     } catch (error) {
       setError(error.message || "Error al registrar el usuario");
     }
@@ -28,6 +39,13 @@ const Register = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Registrarse</Text>
+      <TextInput
+        name="username"
+        placeholder="Nombre de usuario"
+        value={formData.username}
+        onChangeText={(text) => setFormData({ ...formData, username: text })}
+        style={styles.input}
+      />
       <TextInput
         name="email"
         type="email"
