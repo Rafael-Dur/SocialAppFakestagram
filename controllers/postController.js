@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.0.112:3001/api/posts";
+const API_URL = "http://192.168.1.28:3001/api/posts";
 
 export const uploadPost = async (postData, token) => {
   try {

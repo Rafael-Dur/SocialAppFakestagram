@@ -1,6 +1,6 @@
 const { getAuthToken } = require('./authController');
 
-const USER_API_URL = 'http://192.168.0.112:3001/api/user';
+const USER_API_URL = 'http://192.168.1.28:3001/api/user';
 
 // Obtener perfil de usuario
 exports.getUserProfile = async (userId) => {
