@@ -27,8 +27,9 @@ const Login = () => {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "Feed" }],
+        routes: [{ name: "AppTabs" }],
       });
+      
     } catch (error) {
       setError("Credenciales incorrectas o error de conexión");
     }
