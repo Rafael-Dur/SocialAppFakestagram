@@ -9,7 +9,6 @@ import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import AuthContext from "../context/AuthContext";
 
-// Crea el Tab Navigator
 const Tab = createBottomTabNavigator();
 
 // Tabs para usuarios autenticados
@@ -20,6 +19,7 @@ const AppTabs = () => (
     <Tab.Screen name="Perfil" component={ProfileScreen} />
   </Tab.Navigator>
 );
+
 
 const Stack = createStackNavigator();
 
