@@ -1,20 +1,15 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { loginUser } from "../controllers/authController";
 import AuthContext from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Feather";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
-  const { login } = useContext(AuthContext); // Usar el método `login` del contexto
+  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
@@ -26,16 +21,14 @@ const Login = () => {
     }
 
     try {
-      const userData = await loginUser(formData); // Llamada al servicio de autenticación
-      await login(userData); // Guardar usuario en el contexto y AsyncStorage
+      const userData = await loginUser(formData);
+      await login(userData);
       console.log("Usuario autenticado:", userData);
 
-      // Aquí se navega al feed después de guardar al usuario
       navigation.reset({
         index: 0,
         routes: [{ name: "Feed" }],
       });
-
     } catch (error) {
       setError("Credenciales incorrectas o error de conexión");
     }
@@ -52,15 +45,27 @@ const Login = () => {
         onChangeText={(text) => setFormData({ ...formData, email: text })}
         style={styles.input}
       />
-      <TextInput
-        name="password"
-        type="password"
-        placeholder="Contraseña"
-        value={formData.password}
-        onChangeText={(text) => setFormData({ ...formData, password: text })}
-        style={styles.input}
-        secureTextEntry
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          value={formData.password}
+          onChangeText={(text) => setFormData({ ...formData, password: text })}
+          style={styles.input}
+          secureTextEntry={!showPassword}
+        />
+        <TouchableOpacity
+          style={styles.eyeIcon}
+          onPress={() => setShowPassword(!showPassword)} // Cambiar visibilidad
+        >
+          <Icon
+            name={showPassword ? "eye-off" : "eye"} // Usar íconos de ojo abierto o cerrado
+            size={20}
+            color="#007BFF"
+          />
+        </TouchableOpacity>
+      </View>
       {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Iniciar Sesión</Text>
@@ -99,6 +104,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingLeft: 15,
     backgroundColor: "#fff",
+  },
+  passwordContainer: {
+    position: "relative",
+    width: "100%",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 15,
+    top: 15,
+    zIndex: 1,
   },
   button: {
     backgroundColor: "#007BFF",
