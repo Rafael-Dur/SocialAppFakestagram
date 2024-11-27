@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity, Scr
 import PostContext from "../context/PostContext";
 import { MaterialIcons } from 'react-native-vector-icons';
 import AuthContext from "../context/AuthContext";
+import {IP} from "../IP";
 
 const Feed = () => {
   const { user } = useContext(AuthContext);
@@ -62,7 +63,7 @@ const Feed = () => {
       {posts.length > 0 && posts.map((post) => {
         const imageUrl = post.imageUrl.replace(/\\/g, "/");
         const avatarUrl = post.user.profilePicture
-          ? `http://192.168.1.28:3001/${post.user.profilePicture}`
+          ? `http://${IP}:3001/${post.user.profilePicture}`
           : 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
 
         const isLiked = isLikedByUser(post.likes);
@@ -76,7 +77,7 @@ const Feed = () => {
             </View>
 
             {/* Post Image */}
-            <Image source={{ uri: `http://192.168.1.28:3001/${imageUrl}`}} style={styles.postImage} />
+            <Image source={{ uri: `http://${IP}:3001/${imageUrl}`}} style={styles.postImage} />
             {/* Post Actions */}
             <View style={styles.actions}>
               <TouchableOpacity onPress={isLiked ? () => removeLike(post._id) : () => addLike(post._id)} style={styles.likeButton}>

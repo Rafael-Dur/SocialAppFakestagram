@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {IP} from "../IP";
 
-const API_URL = "http://192.168.1.28:3001/api/auth";
+const API_URL = `http://${IP}:3001/api/auth`;
 
 // Guardar el token JWT en AsyncStorage
 export const saveAuthToken = async (token) => {

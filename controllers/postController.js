@@ -1,6 +1,7 @@
 import axios from "axios";
+import {IP} from "../IP";
 
-const API_URL = "http://192.168.1.28:3001/api/posts";
+const API_URL = `http://${IP}:3001/api/posts`;
 
 export const uploadPost = async (postData, token) => {
   try {
