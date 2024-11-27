@@ -1,14 +1,14 @@
 import React from "react";
 import { AuthProvider } from "./context/AuthContext";
-import { ProfileProvider } from "./context/ProfileContext";
+import { PostProvider } from "./context/PostContext";
 import AppNavigator from "./navigation/AppNavigator";
 
 const App = () => {
   return (
     <AuthProvider>
-      <ProfileProvider>
+      <PostProvider>
         <AppNavigator />
-      </ProfileProvider>
+      </PostProvider>
     </AuthProvider>
   );
 };

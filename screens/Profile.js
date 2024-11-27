@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { View, Text, TextInput, Button, Image, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import AuthContext from "../context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
-import { launchImageLibrary } from 'react-native-image-picker';
-import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
 import * as Camera from 'expo-camera';
 import { updateUserProfile } from "../controllers/userController";
 
@@ -28,31 +27,27 @@ const Profile = () => {
     askPermissions();
   }, []);
 
-  const handleImagePick = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 0.5,
-      includeBase64: false,
-    };
-  
-    console.log("Abriendo la galería...");
-  
-    launchImageLibrary(options, (response) => {
-      console.log("Respuesta de launchImageLibrary:", response);
-      if (response.didCancel) {
-        console.log('Usuario canceló la selección de la imagen');
-      } else if (response.errorMessage) {
-        console.log('Error al seleccionar la imagen:', response.errorMessage);
-      } else {
-        if (response.assets && response.assets[0]) {
-          const uri = response.assets[0].uri;
-          console.log("Imagen seleccionada, URI:", uri);
-          setProfilePicture(uri);
-        } else {
-          console.log("No se recibió URI de la imagen");
-        }
-      }
+  const handleImagePick = async () => {
+    // Request permission for photo library (for Expo-managed workflow)
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert("Permiso denegado", "Necesitamos acceso a tu galería para seleccionar una imagen.");
+      return;
+    }
+
+    // Launch the image picker to select a photo
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaType: 'images', // Only allow photos
+      allowsEditing: true, // Optional: allows cropping the image
+      aspect: [4, 3], // Optional: aspect ratio for cropping
     });
+
+    if (!result.canceled) {
+      setProfilePicture(result.assets[0].uri); // Store selected image
+    } else {
+      Alert.alert("Error", "No se seleccionó ninguna imagen.");
+    }
   };
 
   const handleSave = async () => {
