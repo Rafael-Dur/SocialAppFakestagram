@@ -28,7 +28,6 @@ const Profile = () => {
   }, []);
 
   const handleImagePick = async () => {
-    // Request permission for photo library (for Expo-managed workflow)
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {

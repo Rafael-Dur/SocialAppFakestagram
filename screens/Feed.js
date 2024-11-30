@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity, Scr
 import PostContext from "../context/PostContext";
 import { MaterialIcons } from 'react-native-vector-icons';
 import AuthContext from "../context/AuthContext";
-import {IP} from "../IP";
+import { IP } from "../IP";
 
 const Feed = () => {
   const { user } = useContext(AuthContext);
@@ -32,7 +32,6 @@ const Feed = () => {
       fetchCommentsForPost();
     }
   }, [currentPostId]);
-
 
   const isLikedByUser = (likes) => {
     const userId = user._id;
@@ -77,7 +76,7 @@ const Feed = () => {
             </View>
 
             {/* Post Image */}
-            <Image source={{ uri: `http://${IP}:3001/${imageUrl}`}} style={styles.postImage} />
+            <Image source={{ uri: `http://${IP}:3001/${imageUrl}` }} style={styles.postImage} />
             {/* Post Actions */}
             <View style={styles.actions}>
               <TouchableOpacity onPress={isLiked ? () => removeLike(post._id) : () => addLike(post._id)} style={styles.likeButton}>
@@ -103,26 +102,28 @@ const Feed = () => {
 
       {/* Modal for Comment */}
       <Modal visible={isModalVisible} animationType="slide" onRequestClose={() => { setIsModalVisible(false); setCurrentPostId(null); setPostComments(null) }}>
-        {/* <View style={styles.container}>
-          <Button title="Volver" onPress={() => handleNavegation()} />
-          <Image source={{ uri: post.imageUrl }} style={styles.postImage} />
-          <Text style={styles.caption}>{post.caption}</Text>
-          <Text style={styles.likes}>Likes: {post.likes.length}</Text>
-        </View> */}
-        {postComments && postComments.map(comment => <Text key={comment._id}>{comment.content}</Text>)}
         <View style={styles.modalContainer}>
-
-          <Text style={styles.modalTitle}>Add Comment</Text>
+          <ScrollView contentContainerStyle={styles.commentsContainer}>
+            {postComments && postComments.length > 0 ? (
+              postComments.map((comment) => (
+                <Text key={comment._id} style={styles.commentText}>
+                  {comment.content}
+                </Text>
+              ))
+            ) : (
+              <Text style={styles.noCommentsText}>No hay comentarios aún.</Text>
+            )}
+          </ScrollView>
           <TextInput
             style={styles.commentInput}
-            placeholder="Write your comment..."
+            placeholder="Escribe tu comentario..."
             value={commentText}
             onChangeText={setCommentText}
             multiline
           />
           <View style={styles.modalActions}>
-            <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
-            <Button title="Submit" onPress={handleCommentSubmit} />
+            <Button title="Cancelar" onPress={() => setIsModalVisible(false)} />
+            <Button title="Enviar" onPress={handleCommentSubmit} />
           </View>
         </View>
       </Modal>
@@ -191,14 +192,31 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#fff",
     padding: 20,
+    justifyContent: "center",
+    alignItems: "flex-start",
   },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
+  commentsContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingVertical: 20,
+  },
+  commentText: {
+    textAlign: "left",
+    fontSize: 16,
+    color: "#333",
+    marginVertical: 10,
+    width: "90%",
+    marginLeft: 20,
+  },
+  noCommentsText: {
+    textAlign: "left",
+    fontSize: 16,
+    color: "#999",
+    marginVertical: 20,
+    marginLeft: 20,
   },
   commentInput: {
     height: 150,

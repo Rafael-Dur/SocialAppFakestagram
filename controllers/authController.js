@@ -23,7 +23,6 @@ export const getAuthToken = async () => {
   }
 };
 
-// Función para registrar usuario
 export const registerUser = async (userData) => {
   try {
     const response = await fetch(`${API_URL}/register`, {
@@ -43,7 +42,6 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Función para iniciar sesión
 export const loginUser = async (credentials) => {
   try {
     const response = await fetch(`${API_URL}/login`, {

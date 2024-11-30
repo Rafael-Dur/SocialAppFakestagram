@@ -58,10 +58,10 @@ const Login = () => {
         />
         <TouchableOpacity
           style={styles.eyeIcon}
-          onPress={() => setShowPassword(!showPassword)} // Cambiar visibilidad
+          onPress={() => setShowPassword(!showPassword)}
         >
           <Icon
-            name={showPassword ? "eye-off" : "eye"} // Usar íconos de ojo abierto o cerrado
+            name={showPassword ? "eye-off" : "eye"}
             size={20}
             color="#007BFF"
           />

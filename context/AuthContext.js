@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Método para registrar al usuario (puede ser usado como referencia en el contexto global)
+  // Método para registrar al usuario (se puede usar de referencia en el contexto global)
   const register = async (userData) => {
     try {
       setUser(userData);
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Método para cerrar sesión y eliminar datos del usuario
+  // Cierra sesión y elimina datos del usuario
   const logout = async () => {
     try {
       setUser(null);

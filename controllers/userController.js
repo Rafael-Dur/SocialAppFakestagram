@@ -4,7 +4,6 @@ const { getAuthToken } = require('./authController');
 
 const USER_API_URL = `http://${IP}:3001/api/user`;
 
-// Obtener perfil de usuario
 exports.getUserProfile = async (userId) => {
   const token = await getAuthToken();
   try {
@@ -20,7 +19,6 @@ exports.getUserProfile = async (userId) => {
   }
 };
 
-// Actualizar perfil de usuario
 exports.updateUserProfile = async (userData) => {
   const token = await getAuthToken();
   try {
