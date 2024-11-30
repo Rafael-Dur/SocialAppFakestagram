@@ -1,50 +1,34 @@
 import React, { useState, useContext } from "react";
 import { View, Text, Button, Image, TextInput, StyleSheet, Alert, ActivityIndicator } from "react-native";
-import * as ImagePicker from 'expo-image-picker'; // Import expo-image-picker
+import * as ImagePicker from "expo-image-picker";
 import PostContext from "../context/PostContext";
 
 const PostScreen = () => {
   const { addPost, loading } = useContext(PostContext);
   const [image, setImage] = useState(null);
   const [caption, setCaption] = useState("");
-  
+
   const handleTakeImage = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-    
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your camera!");
+    if (!permissionResult.granted) {
+      Alert.alert("Permiso denegado", "No podemos acceder a tu cámara.");
       return;
     }
-    
     const result = await ImagePicker.launchCameraAsync();
-
-    console.log("Resultado:" + result);
-    
     if (!result.canceled) {
-      console.log("Asset 0: " + result.assets[0]);
       setImage(result.assets[0]);
     }
-  }
-  const handleSelectImage = async () => {
-    // Request permission for photo library (for Expo-managed workflow)
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  };
 
-    if (permissionResult.granted === false) {
-      Alert.alert("Permiso denegado", "Necesitamos acceso a tu galería para seleccionar una imagen.");
+  const handleSelectImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert("Permiso denegado", "No podemos acceder a tu galería.");
       return;
     }
-
-    // Launch the image picker to select a photo
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaType: 'images', // Only allow photos
-      allowsEditing: true, // Optional: allows cropping the image
-      aspect: [4, 3], // Optional: aspect ratio for cropping
-    });
-
+    const result = await ImagePicker.launchImageLibraryAsync({ mediaType: "images" });
     if (!result.canceled) {
-      setImage(result.assets[0]); // Store selected image
-    } else {
-      Alert.alert("Error", "No se seleccionó ninguna imagen.");
+      setImage(result.assets[0]);
     }
   };
 
@@ -54,35 +38,38 @@ const PostScreen = () => {
       return;
     }
 
-    // Use FormData to append the image file URI directly
     const formData = new FormData();
-    
     formData.append("image", {
-      uri: image.uri,
-      name: image.fileName,
-      type: image.mimeType,
+      uri: image?.uri || "",
+      name: image?.fileName || "default.jpg",
+      type: image?.mimeType || "image/jpeg",
     });
-    
     formData.append("caption", caption);
-    
-    try {
-      // Call the function to send the post
-      await addPost(formData);
 
-      Alert.alert("Éxito", "Post subido correctamente");
+    try {
+      await addPost(formData);
+      Alert.alert("Éxito", "Imagen subida correctamente.");
       setImage(null);
       setCaption("");
     } catch (err) {
       console.error("Upload failed:", err);
-      Alert.alert("Error", "No se pudo subir el post.");
-    }
-  };
+      Alert.alert("Error", "No se pudo subir la imagen.");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Button title="Seleccionar Imagen" onPress={handleSelectImage} />
-      <Button title="Sacar foto" onPress={handleTakeImage} />
-      {image && <Image source={{ uri: image.uri }} style={styles.imagePreview} />}
+      <View style={styles.buttonGroup}>
+        <Button title="Seleccionar Imagen" onPress={handleSelectImage} />
+        <View style={styles.spacer} />
+        <Button title="Sacar foto" onPress={handleTakeImage} />
+      </View>
+      {image && (
+        <Image
+          source={{ uri: image.uri }}
+          style={styles.imagePreview}
+        />
+      )}
       <TextInput
         style={styles.input}
         placeholder="Escribe un pie de foto..."
@@ -101,22 +88,35 @@ const PostScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f9f9f9",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
   imagePreview: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
     marginVertical: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    padding: 12,
     width: "100%",
     marginBottom: 20,
+    backgroundColor: "#fff",
+    fontSize: 16,
+  },
+  buttonGroup: {
+    marginBottom: 20,
+    width: "100%",
+  },
+  spacer: {
+    height: 10,
   },
 });
 
